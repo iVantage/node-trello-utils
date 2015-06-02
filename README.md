@@ -4,6 +4,15 @@
 > Utility methods to be used with `node-trello`.
 
 
+## Installation
+
+Get it with `npm`:
+
+```
+npm install --save ivantage/node-trello-utils
+```
+
+
 ## Usage
 
 ```javascript
