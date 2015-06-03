@@ -34,10 +34,15 @@ var getCardsByListName = function(t, boardIdOrUrl, listName, ignoreCase, cb) {
   var f = require('util').format
     , boardId = getBoardIdFromUrl(boardIdOrUrl);
 
-  // ignoreCase is optional...
+    // ignoreCase is optional...
   if(typeof ignoreCase === 'function') {
     cb = ignoreCase;
     ignoreCase = false;
+  }
+
+  // validate format of boardId  
+  if(!/[0-9A-Za-z]{8}/.test(boardId)) {
+    return cb(new Error('Invalid board id provided!'));
   }
 
   var listNameSearch = ignoreCase ?

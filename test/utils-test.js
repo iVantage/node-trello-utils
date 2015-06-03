@@ -13,7 +13,7 @@ describe('getBoardIdFromUrl', function() {
   });
 
   it('should return ids as is', function() {
-    var id = 'abcd123'
+    var id = 'abcd1234'
       , actual = utils.getBoardIdFromUrl(id)
       , expected = id;
     expect(actual).to.equal(expected);
@@ -38,17 +38,29 @@ describe('getCardsByListName', function() {
     });
   });
 
+  it('should catch invalid board ids', function() {
+    var actualCards
+      , error;
+    utils.getCardsByListName(t, 'abcd123', 'Snap', function(err, c) {
+      error = err;
+      actualCards = c;
+    });
+    expect(error).to.be.an.instanceOf(Error);
+    expect(actualCards).to.be.an('undefined');
+  });
+
   it('should let us get a list of cards for a given list name', function() {
     var actualCards;
-    utils.getCardsByListName(t, 'board0', 'Snap', function(err, c) {
+    utils.getCardsByListName(t, 'abcd1234', 'Snap', function(err, c) {
       actualCards = c;
     });
     expect(actualCards).to.equal(cards);
   });
 
   it('should allow for ignoring list name case', function() {
-    var actualCards;
-    utils.getCardsByListName(t, 'board0', 'snap', true, function(err, c) {
+    var actualCards
+      , error;
+    utils.getCardsByListName(t, 'abcd1234', 'snap', true, function(err, c) {
       actualCards = c;
     });
     expect(actualCards).to.equal(cards);
@@ -57,7 +69,7 @@ describe('getCardsByListName', function() {
   it('should generate an error if it cannot find the list', function() {
     var actualCards
       , error;
-    utils.getCardsByListName(t, 'board0', 'wowza', function(err, c) {
+    utils.getCardsByListName(t, 'abcd1234', 'wowza', function(err, c) {
       error = err;
       actualCards = c;
     });
