@@ -1,5 +1,11 @@
 
-// Check that a given board id is valid
+/**
+ * Check that a given boardId is valid
+ *
+ * @param {String} boardId The board id to check
+ * @return {Boolean} Whether or not the id is valid
+ * @private
+ */
 var isValidBoardId = function(boardId) {
   return /[0-9a-zA-Z]{8}/.test(boardId);
 };
