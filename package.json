@@ -1,6 +1,6 @@
 {
   "name": "node-trello-utils",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Node-trello utility methods.",
   "main": "index.js",
   "scripts": {

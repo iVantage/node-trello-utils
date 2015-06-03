@@ -41,7 +41,7 @@ var getCardsByListName = function(t, boardIdOrUrl, listName, ignoreCase, cb) {
   }
 
   // validate format of boardId  
-  if(!/[0-9A-Za-z]{8}/.test(boardId)) {
+  if(!_validateBoardId(boardId)) {
     return cb(new Error('Invalid board id provided!'));
   }
 
@@ -69,5 +69,64 @@ var getCardsByListName = function(t, boardIdOrUrl, listName, ignoreCase, cb) {
   });
 };
 
+/**
+ * Get the id of the given card name
+ * 
+ * Note that `cardName` is case sensitive unless `ignoreCase` (optional) is
+ * `true`. The callback will be passed an error if there is one and an array of
+ * trello cards if there are any.
+ *
+ * `cb` is passed an error if the given board does not have a card with the name
+ * provided.
+ *
+ * @param  {Trello} Trello object
+ * @param  {string} boardIdOrUrl A trello board id or url
+ * @param  {string} cardName
+ * @param {Boolean} ignoreCase [=false] Whether or not
+ * @param {Function} cb The callback function
+ */
+var getCardIdByName = function(t, boardIdOrUrl, cardName, ignoreCase, cb) {
+
+  var f = require('util').format
+    , boardId = getBoardIdFromUrl(boardIdOrUrl);
+
+  if(typeof ignoreCase === 'function') {
+    cb = ignoreCase;
+    ignoreCase = false;
+  }
+
+  // validate format of boardId  
+  if(!_validateBoardId(boardId)) {
+    return cb(new Error('Invalid board id provided!'));
+  }
+
+  var cardNameSearch = ignoreCase ? 
+    cardName.toLowerCase() : cardName;
+
+  t.get(f('/1/boards/%s/cards', boardId), function(err, cards) {
+    if(err) { return cb(err); }
+    var ix;
+    for(ix = cards.length; ix--;) {
+      if(cardNameSearch === (ignoreCase ? cards[ix].name.toLowerCase() : cards[ix].name)) {
+        return cb(null, cards[ix].id);
+      }
+    }
+    cb(new Error('No card with name ' + cardName));
+  });
+  
+};
+
+/**
+ * Validate the board id against the Trello API 1.0 specs. It should contain 8
+ * alphanumeric characters.
+ * 
+ * @param  {string} boardId A trello board id
+ * @return {Boolean} true if valid
+ */
+var _validateBoardId = function(boardId) {
+  return /[0-9A-Za-z]{8}/.test(boardId);
+};
+
 exports.getBoardIdFromUrl = getBoardIdFromUrl;
 exports.getCardsByListName = getCardsByListName;
+exports.getCardIdByName = getCardIdByName;
