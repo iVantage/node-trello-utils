@@ -27,6 +27,57 @@ describe('getBoardIdFromUrl', function() {
   });
 });
 
+describe('getCardIdByName', function() {
+  beforeEach(function() {
+    t = {get: function() {}};
+    cards = [{id: 'card0', name: 'foobar'}];
+    sinon.stub(t, 'get', function(url, cb) {
+      if(/boards.*cards/.test(url)) {
+        return cb(null, cards);
+      }
+      return cb(new Error('Unexpected url: ' + url));
+    });
+  });
+
+  it('should catch invalid board ids', function() {
+    var cardId
+      , error;
+    utils.getCardIdByName(t, 'abcd123', 'foobar', function(err, c) {
+      error = err;
+      cardId = c;
+    });
+    expect(error).to.be.an.instanceOf(Error);
+  });
+
+  it('should return the card id for the card name', function() {
+    var cardId;
+    utils.getCardIdByName(t, 'abcd1234', 'foobar', function(err, c) {
+      cardId = c;
+    });
+    expect(cardId).to.equal('card0');
+  });
+
+  it('should allow for ignoring card name case', function() {
+    var cardId;
+    utils.getCardIdByName(t, 'abcd1234', 'FooBar', true, function(err, c) {
+      cardId = c;
+    });
+    expect(cardId).to.equal('card0');
+  });
+
+  it('should generate an error if it cannot find the card', function() {
+    var cardId
+      , error;
+    utils.getCardIdByName(t, 'abcd1234', 'blargus', function(err, c) {
+      error = err;
+      cardId = c;
+    });
+    expect(error).to.be.an.instanceOf(Error);
+    expect(cardId).to.be.an('undefined');
+  });
+
+});
+
 describe('getCardsByListName', function() {
   var t, lists, cards;
 

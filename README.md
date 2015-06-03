@@ -54,6 +54,18 @@ either a Trello board url or a board id) from the list with name `listName`. The
 `ignoreCase` parameter is optional and can be used to indicate that we should
 ignore list name capitalization when searching for `listName`.
 
+#### `getCardIdByName(trello, boardIdOrUrl, cardName[, ignoreCase], callback)`
+- `trello` - A Trello instance a la
+  [node-trello](https://github.com/adunkman/node-trello)
+- `boardIdOrUrl` - A board url or board id
+- `cardName` - The name of the card to return an id for
+- `ignoreCase` - [Optional] Whether or not to consider case when comparing
+  `cardName` to actual card names
+- `callback` - The callback function, it gets an error (or `null`) and the card id.
+
+Return the id of the card corresponding to `boardIdOrUrl` with the card with name
+`cardName`. The `ignoreCase` parameter is optional and can be used to indicate that we should
+ignore list name capitalization when searching for `listName`.
 
 ## Tests
 
