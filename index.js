@@ -1,4 +1,7 @@
 
+// For validating trello board ids
+var boardIdRegExp = /[0-9a-zA-Z]{8}/;
+
 /**
  * Parse a trello board id from its url
  *
@@ -9,9 +12,13 @@
  * @return {String} The board id
  */
 var getBoardIdFromUrl = function(boardUrl) {
-  return boardUrl
+  var boardId = boardUrl
     .replace(/.*\/b\//, '')
     .replace(/\/.*$/, '');
+
+  return boardIdRegExp.test(boardId) ?
+    boardId :
+    '';
 };
 
 /**
@@ -41,7 +48,7 @@ var getCardsByListName = function(t, boardIdOrUrl, listName, ignoreCase, cb) {
   }
 
   // validate format of boardId  
-  if(!/[0-9A-Za-z]{8}/.test(boardId)) {
+  if(!boardIdRegExp.test(boardId)) {
     return cb(new Error('Invalid board id provided!'));
   }
 

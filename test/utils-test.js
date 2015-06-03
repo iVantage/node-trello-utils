@@ -6,9 +6,9 @@ var expect = require('chai').expect
 
 describe('getBoardIdFromUrl', function() {
   it('should pull board ids from a board url', function() {
-    var url = 'https://trello.com/b/abcd123/awesome-board'
+    var url = 'https://trello.com/b/abcd1234/awesome-board'
       , actual = utils.getBoardIdFromUrl(url)
-      , expected = 'abcd123';
+      , expected = 'abcd1234';
     expect(actual).to.equal(expected);
   });
 
@@ -16,6 +16,13 @@ describe('getBoardIdFromUrl', function() {
     var id = 'abcd1234'
       , actual = utils.getBoardIdFromUrl(id)
       , expected = id;
+    expect(actual).to.equal(expected);
+  });
+
+  it('should return an empty string when there is no valid id', function() {
+    var url = 'https://trello.com/b/_bad_/awesome-board'
+      , actual = utils.getBoardIdFromUrl(url)
+      , expected = '';
     expect(actual).to.equal(expected);
   });
 });

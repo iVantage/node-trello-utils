@@ -35,7 +35,9 @@ utils.getCardsByListName(t, boardUrl, listName, function(err, cards) {
 #### `getBoardIdFromUrl(boardUrl)`
 - `boardUrl` - A Trello board url
 
-Given a trello board url, parses and returns the board id.
+Given a trello board url, parses and returns the board id. When passed a valid
+id (i.e. instead of a full url) will return the id. If `getBoardIdFromUrl`
+cannot find a valid id it will return the empty string.
 
 #### `getCardsByListName(trello, boardIdOrUrl, listName[, ignoreCase], callback)`
 - `trello` - A Trello instance a la
